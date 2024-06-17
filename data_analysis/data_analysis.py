@@ -74,7 +74,7 @@ class DataAnalysis(DataAnalysisInterface):
         null_values = sum(1 for item in value_set if item is None or item == 0)
         percentage = round(100*null_values/len(value_set), 2)
         print(f'Null and zero values count: {null_values}')
-        print(f'Percentage of null and zero values: {percentage} %')
+        print(f'Percentage of null and zero values: {percentage}%')
               
 
     def create_comparison_index(self):

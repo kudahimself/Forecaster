@@ -12,7 +12,7 @@ df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
 
 
 def main():
-    pipeline = Run(df_filtered, '2min')
+    pipeline = Run(df_filtered, '1min')
     pipeline.data_analysis()
 
 
