@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
-
+from tabulate import tabulate
+from terminalplot import plot as tp
 
 
 class DataAnalysisInterface(ABC):
@@ -37,6 +38,9 @@ class DataAnalysis(DataAnalysisInterface):
         print('Starting Analyis...')
         self.missing_values()
         self.null_values()
+        self.data_facts()
+        self.plot_data()
+        
     
     
     @staticmethod
@@ -73,8 +77,11 @@ class DataAnalysis(DataAnalysisInterface):
         value_set = tuple(self.data['values'])
         null_values = sum(1 for item in value_set if item is None or item == 0)
         percentage = round(100*null_values/len(value_set), 2)
-        print(f'Null and zero values count: {null_values}')
-        print(f'Percentage of null and zero values: {percentage}%')
+
+        table = [
+            ["Null and Zero Count", null_values],
+            ["Percentage of null and zero values", f'{percentage}%']]
+        print(tabulate(table, headers=["Statistic", "Value"], tablefmt="grid"))
               
 
     def create_comparison_index(self):
@@ -94,15 +101,54 @@ class DataAnalysis(DataAnalysisInterface):
         min_date = self.data['datetime'].min()  # Ensure proper date format
         max_date = self.data['datetime'].max()
 
+
         # Create the DatetimeIndex with the specified frequency
         datetime_range = pd.date_range(start=min_date, end=max_date, freq=self.freq)
-        print('The frequency is:', self.freq)
-
+        table = [
+            [self.freq]]
+        print(tabulate(table, headers=["Aggregation"], tablefmt="grid"))
 
         return datetime_range
 
 
+    def data_facts(self):
+        
+        min_date = self.data['datetime'].min()  # Ensure proper date format
+        max_date = self.data['datetime'].max()
+
+        min_value = self.data['values'].min()  
+        max_value = self.data['values'].max()
+        mean_value = round(self.data['values'].mean(), 2)
+
+        count = self.data.shape[0]
+        
+        std_dev = round(self.data['values'].std(), 2)
+
+        # Create a table
+        table = [
+            ["Min Date", min_date],
+            ["Max Date", max_date],
+            ["Min Value", min_value],
+            ["Max Value", max_value],
+            ["Mean Value", mean_value],
+            ["Count", count],
+            ["Standard Deviation", std_dev],
+            ["Standard Deviation over Mean", round(std_dev/mean_value, 2)]
+        ]
+        
+        # Print the table
+        print(tabulate(table, headers=["Statistic", "Value"], tablefmt="grid"))
+    
+
+    def plot_data(self):
+        df = self.data
+        df['datetime'] = pd.to_datetime(df['datetime'])
+
+        x = range(100)
+        y = [i**2 for i in x]
+        tp(y, x)
 
 
 
 
+    
