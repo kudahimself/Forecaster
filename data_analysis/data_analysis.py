@@ -36,18 +36,15 @@ class DataAnalysis(DataAnalysisInterface):
         self.data = DataAnalysis.initialise_ts_data(ts_data)
         self.freq = freq
     
-    def analyse_data(self, app_i):
-        root = ctk.CTk()
-        app_i = Notes(root, 'Data Analysis')
-        app_i.prompt_user('Hey', 'Insert Name')
-        self.missing_values(app_i)
-        self.null_values(app_i)
-        self.data_facts(app_i)
-        self.plot_data(app_i)
+    def analyse_data(self, tab):
+        self.missing_values(tab)
+        self.null_values(tab)
+        self.data_facts(tab)
+        self.plot_data(tab)
 
-        # Render all elements at once
-        app_i.render()
-        root.mainloop()
+        # # Render all elements at once
+        # tab.render()
+        # tab.mainloop()
 
 
     def missing_values(self, app_i: Notes):
