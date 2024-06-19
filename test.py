@@ -1,17 +1,25 @@
-import matplotlib.pyplot as plt
+import customtkinter as ctk
 
-# Use the terminal backend
-plt.switch_backend('module://matplotlib_terminal.backend')
+# Create the main application window
+app = ctk.CTk()
 
-# Sample data
-x = [1, 2, 3, 4, 5]
-y = [10, 20, 30, 40, 50]
+# Set the title of the window
+app.title("Forecaster")
 
-# Create a plot
-plt.plot(x, y)
-plt.title('Sample Plot')
-plt.xlabel('X-axis')
-plt.ylabel('Y-axis')
+# Set the size of the window
+app.geometry("856x645")
 
-# Show the plot in the terminal
-plt.show()
+# Create a label with the text "Forecaster"
+label = ctk.CTkLabel(app, text="Forecaster", font=("Arial", 24))
+label.pack(pady=20)
+
+# Create a button that asks "Do you want to see the data analysis?"
+def on_button_click():
+    # Add functionality for the button click here
+    print("Button clicked! Show data analysis.")
+
+button = ctk.CTkButton(app, text="Do you want to see the data analysis?", command=on_button_click)
+button.pack(pady=20)
+
+# Run the application
+app.mainloop()

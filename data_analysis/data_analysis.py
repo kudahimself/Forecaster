@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
-from terminalplot import plot as tp
+from graphical_user_interface.module_notes import Notes
+import customtkinter as ctk
+import tkinter as tk
 
 
 class DataAnalysisInterface(ABC):
@@ -34,30 +36,22 @@ class DataAnalysis(DataAnalysisInterface):
         self.data = DataAnalysis.initialise_ts_data(ts_data)
         self.freq = freq
     
-    def analyse_data(self):
-        print('Starting Analyis...')
-        self.missing_values()
-        self.null_values()
-        self.data_facts()
-        self.plot_data()
-        
-    
-    
-    @staticmethod
-    def answer_input(ans, prompt, answer_msg):
-            answer = None
-            while not answer:
-                answer = input(prompt)
-                if answer.lower() == 'y':
-                    [print(x) for x in ans]
-                elif answer.lower() == 'n':
-                    answer = True
-                else:
-                    DataAnalysis.answer_input(ans, prompt, answer_msg)
+    def analyse_data(self, app_i):
+        root = ctk.CTk()
+        app_i = Notes(root, 'Data Analysis')
+        app_i.prompt_user('Hey', 'Insert Name')
+        self.missing_values(app_i)
+        self.null_values(app_i)
+        self.data_facts(app_i)
+        self.plot_data(app_i)
 
-    
-    def missing_values(self):
-        reference_datetime_range = self.create_comparison_index()
+        # Render all elements at once
+        app_i.render()
+        root.mainloop()
+
+
+    def missing_values(self, app_i: Notes):
+        reference_datetime_range = self.create_comparison_index(app_i)
         checking_dataset = self.data.copy().index
 
         
@@ -67,13 +61,10 @@ class DataAnalysis(DataAnalysisInterface):
         # Elements in reference_set but not in checking_set (difference)
         only_in_reference = reference_set - checking_set
         if only_in_reference:
-            print(f'{len(only_in_reference)} missing values have been identified in this dataset\n')
-            DataAnalysis.answer_input(only_in_reference,
-                                      'Do you want to see the values. Type "Y" or "N": ',
-                                      f'There are {len(only_in_reference)} values missing')                    
+            app_i.add_text(f'There are {len(only_in_reference)} values missing')                    
     
 
-    def null_values(self):
+    def null_values(self, app_i: Notes):
         value_set = tuple(self.data['values'])
         null_values = sum(1 for item in value_set if item is None or item == 0)
         percentage = round(100*null_values/len(value_set), 2)
@@ -81,10 +72,11 @@ class DataAnalysis(DataAnalysisInterface):
         table = [
             ["Null and Zero Count", null_values],
             ["Percentage of null and zero values", f'{percentage}%']]
-        print(tabulate(table, headers=["Statistic", "Value"], tablefmt="grid"))
+        app_i.add_table(table, headers=["Statistic", "Value"])
               
 
-    def create_comparison_index(self):
+    def create_comparison_index(self, app_i: Notes):
+
         """
         This function creates a DatetimeIndex based on provided min and max dates,
         and a desired frequency.
@@ -101,17 +93,17 @@ class DataAnalysis(DataAnalysisInterface):
         min_date = self.data['datetime'].min()  # Ensure proper date format
         max_date = self.data['datetime'].max()
 
-
         # Create the DatetimeIndex with the specified frequency
         datetime_range = pd.date_range(start=min_date, end=max_date, freq=self.freq)
         table = [
             [self.freq]]
-        print(tabulate(table, headers=["Aggregation"], tablefmt="grid"))
+        
+        app_i.add_table(table, headers=["Aggregation"])
 
         return datetime_range
 
 
-    def data_facts(self):
+    def data_facts(self, app_i: Notes):
         
         min_date = self.data['datetime'].min()  # Ensure proper date format
         max_date = self.data['datetime'].max()
@@ -137,18 +129,14 @@ class DataAnalysis(DataAnalysisInterface):
         ]
         
         # Print the table
-        print(tabulate(table, headers=["Statistic", "Value"], tablefmt="grid"))
+        app_i.add_table(table, headers=["Statistics", "Value"])
     
-
-    def plot_data(self):
+    
+    def plot_data(self, app_i: Notes):
         df = self.data
-        df['datetime'] = pd.to_datetime(df['datetime'])
-
-        x = range(100)
-        y = [i**2 for i in x]
-        tp(y, x)
-
-
-
-
-    
+        x = df['datetime']
+        y = df['values']
+        title = f'Aggregated Time Series Data to {self.freq}'
+        x_label = 'Time'
+        y_label = 'Values'
+        app_i.plot_graph(x, y, title, x_label, y_label)
