@@ -93,7 +93,7 @@ class Notes:
                 plot_frame = ctk.CTkFrame(self.scrollable_frame)
                 plot_frame.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
                 
-                fig = Figure(figsize=(10, 10), dpi=100)
+                fig = Figure(figsize=(10, 8), dpi=100)
                 ax = fig.add_subplot(111)
                 ax.plot(x, y)
                 ax.set_title(title)

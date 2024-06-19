@@ -18,13 +18,16 @@ class MainPage:
         self.tab_view = ctk.CTkTabview(self.app)
         self.tab_view.pack(fill="both", expand=True, pady=20)
 
+        #Initial tabs
+        self.tabs = {}
+
         # Add the initial tab
         self.add_initial_tab()
 
         # Create buttons with a reusable click handler
-        self.create_button("Data Analysis", pipeline.data_analysis, "Data Analysis Tab")
+        self.create_button("Data Analysis", pipeline.data_analysis, "Data Analysis")
         # self.create_button("Data Imputation", pipeline.data_imputation, "Data Imputation Tab")
-
+        
         # Run the application
         self.app.mainloop()
 
@@ -44,7 +47,12 @@ class MainPage:
         button.pack(pady=10)
 
     def add_tab(self, tab_name, callback):
-        tab = self.tab_view.add(tab_name)
-        notes = Notes(tab, tab_name)
-        callback(notes)
-        notes.render()
+        if tab_name not in self.tabs:
+            self.tabs[tab_name] = self.tab_view.add(tab_name)
+            notes = Notes(self.tabs[tab_name], tab_name)
+            callback(notes)
+            notes.render()
+
+    def get_tab(self, tab_name):
+        return self.tabs.get(tab_name, None)
+

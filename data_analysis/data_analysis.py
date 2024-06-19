@@ -42,10 +42,6 @@ class DataAnalysis(DataAnalysisInterface):
         self.data_facts(tab)
         self.plot_data(tab)
 
-        # # Render all elements at once
-        # tab.render()
-        # tab.mainloop()
-
 
     def missing_values(self, app_i: Notes):
         reference_datetime_range = self.create_comparison_index(app_i)
