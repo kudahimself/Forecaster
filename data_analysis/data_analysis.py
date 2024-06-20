@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
-from graphical_user_interface.module_notes import Notes
+from gui.page_notes import Notes
 import customtkinter as ctk
 import tkinter as tk
 
