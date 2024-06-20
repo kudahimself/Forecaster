@@ -26,7 +26,7 @@ class MainPage:
 
         # Create buttons with a reusable click handler
         self.create_button("Data Analysis", pipeline.data_analysis, "Data Analysis")
-        # self.create_button("Data Imputation", pipeline.data_imputation, "Data Imputation Tab")
+        self.create_button("Data Imputation", pipeline.imputate_data, "Data Imputation Tab")
         
         # Run the application
         self.app.mainloop()
