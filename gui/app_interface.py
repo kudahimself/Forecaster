@@ -1,9 +1,9 @@
 import customtkinter as ctk
 from run.run import Run
-from graphical_user_interface.module_notes import Notes
+from gui.page_notes import Notes
 
 
-class MainPage:
+class ForecasterApp:
     def __init__(self, pipeline: Run):
         self.app_width = 800
         self.app_height = 600
