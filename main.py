@@ -1,7 +1,9 @@
-from run.run import Run
+from facade.facade import ForecastingFacade
+from models.forecast_model import ForecastingModel
+from views.forecast_view import ForecastingView
+from controllers.forecast_controller import ForecastingController
 import pandas as pd
 import numpy as np
-from gui.app_interface import ForecasterApp
 
 # Generate the date range
 date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 00:59', freq='1Min')
@@ -12,9 +14,15 @@ df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
 
 
 def main():
-    gui = ForecasterApp(Run(df_filtered, '1min'))
 
-    # pipeline.data_analysis()
+    facade = ForecastingFacade(df_filtered, '1min')
+    model = ForecastingModel(facade)
+    view = ForecastingView()
+    controller = ForecastingController(model, view)
+
+    # Run the application
+    controller.update_view()
+    # Handle user interactions in a loop or event-driven manner
 
 
 main()

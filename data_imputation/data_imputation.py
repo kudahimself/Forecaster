@@ -1,13 +1,19 @@
 import pandas as pd
 from statistics import mode
+import customtkinter as ctk
+
 
 class Imputator:
 
-    def __init__(self, ts_data) -> None:
-        self.data = ts_data
+    def __init__(self, ts_data, tab, app_geometry) -> None:
+        self.data = ts_data.copy()
+        self.tab = tab
+        self.app_width = app_geometry[0]
+        self.app_height = app_geometry[1]
+        self.original = ts_data.copy()
 
-    def impute(self, ts_data, imp_type, tab, fixed_value=None):
-
+    def impute(self, imp_type='next', fixed_value=None):
+        ts_data = self.original
         match imp_type:
 
             case 'next':
@@ -34,49 +40,72 @@ class Imputator:
             case 'fixed_value':
                 result = self.impute_fv(ts_data, fixed_value)
 
-        return result
+        self.data = result
     
-
     def impute_next(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_data['values'] = ts_data['values'].fillna(method='bfill')
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).bfill()
         return ts_data
-    
+
     def impute_previous(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_data['values'] = ts_data['values'].fillna(method='ffill')
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).ffill()
         return ts_data
 
     def impute_mode(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_mode = mode(ts_data['values'].dropna())
-        ts_data['values'] = ts_data['values'].fillna(ts_mode)
+        mode_value = ts_data['values'].mode()[0]
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(mode_value)
         return ts_data
 
     def impute_mean(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_mean = ts_data['values'].mean()
-        ts_data['values'] = ts_data['values'].fillna(ts_mean)
+        mean_value = ts_data['values'].mean()
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(mean_value)
         return ts_data
 
     def impute_min(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_min = ts_data['values'].min()
-        ts_data['values'] = ts_data['values'].fillna(ts_min)
+        min_value = ts_data['values'].min()
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(min_value)
         return ts_data
 
     def impute_max(self, ts_data):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_max = ts_data['values'].max()
-        ts_data['values'] = ts_data['values'].fillna(ts_max)
+        max_value = ts_data['values'].max()
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(max_value)
         return ts_data
 
     def impute_mva(self, ts_data, window=3):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_data['values'] = ts_data['values'].fillna(ts_data['values'].rolling(window, min_periods=1).mean())
+        rolling_mean = ts_data['values'].rolling(window, min_periods=1).mean()
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(rolling_mean)
         return ts_data
 
     def impute_fv(self, ts_data, fixed_value):
-        ts_data['values'].replace(0, pd.NA, inplace=True)
-        ts_data['values'] = ts_data['values'].fillna(fixed_value)
+        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(fixed_value)
         return ts_data
+    
+    def render(self, tab):
+        # Create a canvas inside the tab
+        self.canvas = ctk.CTkCanvas(tab)
+        self.canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
+
+        # Create a frame inside the canvas with the same size as the main window
+        self.frame = ctk.CTkFrame(self.canvas, width=self.app_width, height=self.app_height, fg_color="transparent")
+        self.frame.pack(expand=True)
+        self.frame.pack(pady=20, padx=60, fill="both", expand=True)
+
+        # Add a label
+        label = ctk.CTkLabel(master=self.frame, text="Select a type of imputation", font=("Arial", 18))
+        label.pack(pady=12, padx=10)
+
+        # Add buttons for each imputation type
+        buttons = [
+            ("Next", 'next'),
+            ("Previous", 'previous'),
+            ("Mode", 'mode'),
+            ("Mean", 'mean'),
+            ("Min", 'min'),
+            ("Max", 'max'),
+            ("Moving Average", 'moving_avg'),
+            ("Fixed Value", 'fixed_value')
+        ]
+
+        for text, impute_type in buttons:
+            button = ctk.CTkButton(master=self.frame, text=text, command=lambda impute_type=impute_type: self.impute(impute_type))
+            button.pack(pady=10)
+

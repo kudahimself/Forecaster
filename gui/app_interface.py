@@ -1,6 +1,7 @@
 import customtkinter as ctk
-from run.run import Run
+from facade.facade import Run
 from gui.page_notes import Notes
+
 
 
 class ForecasterApp:
@@ -14,7 +15,9 @@ class ForecasterApp:
         self.app.title("Forecaster")
 
         # Set the size of the window
-        self.app.geometry(f"{self.app_width}x{self.app_height}") 
+        self.app.geometry(f"{self.app_width}x{self.app_height}")
+
+        self.app._set_appearance_mode('dark')
 
         # Force the window to update and render
         self.app.update_idletasks()
@@ -29,8 +32,6 @@ class ForecasterApp:
         # Add the initial tab
         self.add_main_tab(pipeline)
 
-
-        
         # Run the application
         self.app.mainloop()
 
@@ -58,28 +59,31 @@ class ForecasterApp:
 
         # Create buttons with a reusable click handler
         self.create_button("Data Analysis", pipeline.data_analysis, "Data Analysis")
-        self.create_button("Data Imputation", pipeline.imputate_data, "Data Imputation")
+        self.create_button("Data Imputation", pipeline.imputate_data, "Data Imputation", True)
 
+    def on_button_click(self, callback, tab_name, specific_tab):
+        self.add_tab(tab_name, callback, specific_tab)
 
-    def on_button_click(self, callback, tab_name):
-        print(f"Executing {callback.__name__}")
-        self.add_tab(tab_name, callback)
-
-    def create_button(self, text, callback, tab_name):
+    def create_button(self, text, callback, tab_name, specific_tab=None):
         tab = self.get_tab('Main')
         if tab:
             # Add button to the frame inside the "Main" tab
-            button = ctk.CTkButton(self.frame, text=text, command=lambda: self.on_button_click(callback, tab_name))
+            button = ctk.CTkButton(self.frame, text=text, command=lambda: self.on_button_click(callback, tab_name, specific_tab))
             button.pack(side=ctk.LEFT, padx=10, pady=10)
         else:
             print(f"Tab 'Main' not found")
 
-    def add_tab(self, tab_name, callback):
+    def add_tab(self, tab_name, callback, specific_tab):
         if tab_name not in self.tabs:
-            self.tabs[tab_name] = self.tab_view.add(tab_name)
-            notes = Notes(self.tabs[tab_name], tab_name)
-            callback(notes)
-            notes.render()
+            print(f"Executing {callback.__name__}")
+            if not specific_tab and (tab_name not in self.tabs):
+                self.tabs[tab_name] = self.tab_view.add(tab_name)
+                notes = Notes(self.tabs[tab_name], tab_name)
+                callback(notes)
+                notes.render()
+            else:
+                self.tabs[tab_name] = self.tab_view.add(tab_name)
+                callback(self.tabs[tab_name], [self.app_width, self.app_height])
 
     def get_tab(self, tab_name):
         return self.tabs.get(tab_name)

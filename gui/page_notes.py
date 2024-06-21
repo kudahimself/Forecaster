@@ -32,9 +32,6 @@ class CustomPrompt(ctk.CTkFrame):
 class Notes:
     def __init__(self, root, title):
         self.root = root
-        # self.root.geometry("856x645")
-        # self.root.title(title)
-
         self.root._set_appearance_mode("dark")
 
         # Create a canvas to add a scrollbar
@@ -113,7 +110,4 @@ class Notes:
                 table = CTkTable(master=self.scrollable_frame, values=data, header_color="#52AA91", colors=["#FFFFFF", "#DBEEEA"])
                 table.pack(expand=True, fill="both", padx=20, pady=20)
 
-
-        def render_main_page():
-            pass
         
