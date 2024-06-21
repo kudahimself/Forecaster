@@ -35,16 +35,24 @@ class DataAnalysis(DataAnalysisInterface):
 
         self.data = DataAnalysis.initialise_ts_data(ts_data)
         self.freq = freq
+        self.results = None
     
-    def analyse_data(self, tab):
-        self.missing_values(tab)
-        self.null_values(tab)
-        self.data_facts(tab)
-        self.plot_data(tab)
+    def get_results(self):
+        return self.results
+    
+    def analyse_data(self):
+        missing_values = self.missing_values()
+        null_values = self.null_values()
+        data_facts = self.data_facts()
+        plot_data = self.plot_data()
+        
+        self.results = {'missing_values': missing_values,
+                'null_values': null_values,
+                'data_facts': data_facts,
+                'plot_data': plot_data}
 
-
-    def missing_values(self, app_i: Notes):
-        reference_datetime_range = self.create_comparison_index(app_i)
+    def missing_values(self):
+        reference_datetime_range, aggregation_table = self.create_comparison_index()
         checking_dataset = self.data.copy().index
 
         
@@ -54,10 +62,13 @@ class DataAnalysis(DataAnalysisInterface):
         # Elements in reference_set but not in checking_set (difference)
         only_in_reference = reference_set - checking_set
         if only_in_reference:
-            app_i.add_text(f'There are {len(only_in_reference)} values missing')                    
-    
+            # app_i.add_text(f'There are {len(only_in_reference)} values missing')
+            pass
+        else:
+            only_in_reference = 'None'                    
+        return (aggregation_table, only_in_reference)
 
-    def null_values(self, app_i: Notes):
+    def null_values(self):
         value_set = tuple(self.data['values'])
         null_values = sum(1 for item in value_set if item is None or item == 0)
         percentage = round(100*null_values/len(value_set), 2)
@@ -65,10 +76,11 @@ class DataAnalysis(DataAnalysisInterface):
         table = [
             ["Null and Zero Count", null_values],
             ["Percentage of null and zero values", f'{percentage}%']]
-        app_i.add_table(table, headers=["Statistic", "Value"])
+        # app_i.add_table(table, headers=["Statistic", "Value"])
               
+        return table
 
-    def create_comparison_index(self, app_i: Notes):
+    def create_comparison_index(self):
 
         """
         This function creates a DatetimeIndex based on provided min and max dates,
@@ -91,12 +103,12 @@ class DataAnalysis(DataAnalysisInterface):
         table = [
             [self.freq]]
         
-        app_i.add_table(table, headers=["Aggregation"])
+        # app_i.add_table(table, headers=["Aggregation"])
 
-        return datetime_range
+        return datetime_range, table
 
 
-    def data_facts(self, app_i: Notes):
+    def data_facts(self):
         
         min_date = self.data['datetime'].min()  # Ensure proper date format
         max_date = self.data['datetime'].max()
@@ -122,14 +134,16 @@ class DataAnalysis(DataAnalysisInterface):
         ]
         
         # Print the table
-        app_i.add_table(table, headers=["Statistics", "Value"])
+        # app_i.add_table(table, headers=["Statistics", "Value"])
+        return table
     
     
-    def plot_data(self, app_i: Notes):
+    def plot_data(self):
         df = self.data
         x = df['datetime']
         y = df['values']
         title = f'Aggregated Time Series Data to {self.freq}'
         x_label = 'Time'
         y_label = 'Values'
-        app_i.plot_graph(x, y, title, x_label, y_label)
+        # app_i.plot_graph(x, y, title, x_label, y_label)
+        return (x, y, title, x_label, y_label)
