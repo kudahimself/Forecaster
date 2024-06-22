@@ -62,11 +62,10 @@ class DataAnalysis(DataAnalysisInterface):
         # Elements in reference_set but not in checking_set (difference)
         only_in_reference = reference_set - checking_set
         if only_in_reference:
-            # app_i.add_text(f'There are {len(only_in_reference)} values missing')
-            pass
+            missing_values = [['Missing Values'], len(only_in_reference)]
         else:
-            only_in_reference = 'None'                    
-        return (aggregation_table, only_in_reference)
+            missing_values = [['Missing Values'], ['None']]                    
+        return [aggregation_table, missing_values]
 
     def null_values(self):
         value_set = tuple(self.data['values'])
@@ -100,11 +99,8 @@ class DataAnalysis(DataAnalysisInterface):
 
         # Create the DatetimeIndex with the specified frequency
         datetime_range = pd.date_range(start=min_date, end=max_date, freq=self.freq)
-        table = [
-            [self.freq]]
-        
-        # app_i.add_table(table, headers=["Aggregation"])
-
+        table = [['Aggregation'], [self.freq]]
+    
         return datetime_range, table
 
 
@@ -133,8 +129,6 @@ class DataAnalysis(DataAnalysisInterface):
             ["Standard Deviation over Mean", round(std_dev/mean_value, 2)]
         ]
         
-        # Print the table
-        # app_i.add_table(table, headers=["Statistics", "Value"])
         return table
     
     
@@ -145,5 +139,4 @@ class DataAnalysis(DataAnalysisInterface):
         title = f'Aggregated Time Series Data to {self.freq}'
         x_label = 'Time'
         y_label = 'Values'
-        # app_i.plot_graph(x, y, title, x_label, y_label)
-        return (x, y, title, x_label, y_label)
+        return [x, y, title, x_label, y_label]
