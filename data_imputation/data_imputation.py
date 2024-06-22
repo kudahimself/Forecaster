@@ -5,14 +5,11 @@ import customtkinter as ctk
 
 class Imputator:
 
-    def __init__(self, ts_data, tab, app_geometry) -> None:
+    def __init__(self, ts_data) -> None:
         self.data = ts_data.copy()
-        self.tab = tab
-        self.app_width = app_geometry[0]
-        self.app_height = app_geometry[1]
         self.original = ts_data.copy()
 
-    def impute(self, imp_type='next', fixed_value=None):
+    def impute_data(self, imp_type, fixed_value=None):
         ts_data = self.original
         match imp_type:
 
@@ -40,7 +37,7 @@ class Imputator:
             case 'fixed_value':
                 result = self.impute_fv(ts_data, fixed_value)
 
-        self.data = result
+        return result
     
     def impute_next(self, ts_data):
         ts_data['values'] = ts_data['values'].replace(0, pd.NA).bfill()
@@ -78,6 +75,9 @@ class Imputator:
     def impute_fv(self, ts_data, fixed_value):
         ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(fixed_value)
         return ts_data
+    
+    def get_results(self):
+        return self.data
     
     def render(self, tab):
         # Create a canvas inside the tab

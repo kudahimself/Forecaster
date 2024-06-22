@@ -2,6 +2,7 @@ import customtkinter as ctk
 from CTkTable import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from views.abstract_page_view import AbstractPage
 
 
 
@@ -54,6 +55,10 @@ class ForecastingView:
     def display_analysis_results(self, results):
         self.data_analysis_page.display_analysis_results(results)
     
+    def create_data_imputation_page(self):
+        self.data_imputation_page = DataImputationView(self)
+        self.data_imputation_page.create_data_imputation_page()
+    
 
     def display_main_page():
         pass   
@@ -72,7 +77,7 @@ class ForecastingView:
 
 
 
-class MainPageView:
+class MainPageView(AbstractPage):
 
     def __init__(self, fv: ForecastingView) -> None:
         self.fv = fv
@@ -103,8 +108,12 @@ class MainPageView:
         button = ctk.CTkButton(frame, text='Data Analysis', command=lambda: self.fv.create_data_analysis_page())
         button.pack(side=ctk.LEFT, padx=10, pady=10)
 
+        button = ctk.CTkButton(frame, text='Data Imputation', command=lambda: self.fv.create_data_imputation_page())
+        button.pack(side=ctk.LEFT, padx=10, pady=10)
 
-class DataAnalysisView:
+
+
+class DataAnalysisView(AbstractPage):
 
     def __init__(self, fv: ForecastingView):
         self.fv = fv
@@ -177,39 +186,58 @@ class DataAnalysisView:
         self.display_graph(scrollable_frame, plot_data)
 
 
-    def display_table(self, frame, table):
-        table = CTkTable(master=frame, values=table, header_color="#52AA91", colors=["#FFFFFF", "#DBEEEA"])
-        table.pack(expand=True, fill="both", padx=20, pady=20)
-    
-    def display_text(self, frame, text):
-        # Calculate number of lines in text
-        num_lines = text.count('\n') + 1
-        # Calculate height based on number of lines
-        text_height = num_lines * 20  # Adjust multiplier as needed
-        # Create CTkTextbox directly on the canvas, not in scrollable_frame
-        text_display = ctk.CTkTextbox(frame, wrap='word', height=text_height, activate_scrollbars=False)
-        text_display.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
-        text_display.insert(ctk.END, text + '\n')
-    
-    def display_graph(self, frame, plot_data):
-        x = plot_data[0]
-        y = plot_data[1]
-        title= plot_data[2]
-        xlabel= plot_data[3]
-        ylabel = plot_data[4]
-        plot_frame = ctk.CTkFrame(frame)
-        plot_frame.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
+
+class DataImputationView(AbstractPage):
+
+    def __init__(self, fv: ForecastingView):
+        self.fv = fv
+        self.tab_name = "Data Imputation"
+
+    def create_data_imputation_page(self):
         
-        fig = Figure(figsize=(10, 8), dpi=100)
-        ax = fig.add_subplot(111)
-        ax.plot(x, y)
-        ax.set_title(title)
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        
-        # Display only the first and last value on the x-axis
-        ax.set_xticks([x.iloc[0], x.iloc[-1]])
-        
-        canvas = FigureCanvasTkAgg(fig, master=plot_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=ctk.TOP, fill=ctk.BOTH, expand=1)
+        # Check if tab already exists to avoid duplication
+        if self.tab_name not in self.fv.tabs:
+            self.fv.add_tab(self.tab_name)
+            tab = self.fv.get_tab(self.tab_name)
+
+            # Create a canvas inside the tab
+            canvas = ctk.CTkCanvas(tab)
+            canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
+
+            # Create a frame inside the canvas with the same size as the main window
+            frame = ctk.CTkFrame(canvas, width=self.fv.app_width, height=self.fv.app_height, fg_color="transparent")
+            canvas.create_window((0, 0), window=frame, anchor='nw')
+
+            self.display_buttons()
+
+    def display_buttons(self):
+        # Create a canvas inside the tab
+        tab = self.fv.get_tab(self.tab_name)
+        canvas = ctk.CTkCanvas(tab)
+        canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
+
+        # Create a frame inside the canvas with the same size as the main window
+        frame = ctk.CTkFrame(canvas, width=self.fv.app_width, height=self.fv.app_height, fg_color="transparent")
+        frame.pack(expand=True)
+        frame.pack(pady=20, padx=60, fill="both", expand=True)
+
+        # Add a label
+        label = ctk.CTkLabel(master=frame, text="Select a type of imputation", font=("Arial", 18))
+        label.pack(pady=12, padx=10)
+
+        # Add buttons for each imputation type
+        buttons = [
+            ("Next", 'next'),
+            ("Previous", 'previous'),
+            ("Mode", 'mode'),
+            ("Mean", 'mean'),
+            ("Min", 'min'),
+            ("Max", 'max'),
+            ("Moving Average", 'moving_avg'),
+            ("Fixed Value", 'fixed_value')
+        ]
+
+        for text, impute_type in buttons:
+            button = ctk.CTkButton(master=frame, text=text, command=lambda impute_type=impute_type: self.fv.controller.perform_impute_data(impute_type))
+            button.pack(pady=10)
+

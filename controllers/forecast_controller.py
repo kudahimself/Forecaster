@@ -24,4 +24,9 @@ class ForecastingController:
         self.model.execute_data_analysis()
         analysis_data = self.model.get_analysis()
         self.view.display_analysis_results(analysis_data)
-        # self.view.display_analysis_results(results)
+    
+    def perform_impute_data(self, impute_type):
+        print('Replacing Missing Values')
+        self.model.execute_data_imputation(impute_type)
+        imputated_data = self.model.get_data()
+        print(imputated_data)

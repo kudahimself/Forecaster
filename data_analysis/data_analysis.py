@@ -35,10 +35,6 @@ class DataAnalysis(DataAnalysisInterface):
 
         self.data = DataAnalysis.initialise_ts_data(ts_data)
         self.freq = freq
-        self.results = None
-    
-    def get_results(self):
-        return self.results
     
     def analyse_data(self):
         missing_values = self.missing_values()
@@ -46,7 +42,7 @@ class DataAnalysis(DataAnalysisInterface):
         data_facts = self.data_facts()
         plot_data = self.plot_data()
         
-        self.results = {'missing_values': missing_values,
+        return {'missing_values': missing_values,
                 'null_values': null_values,
                 'data_facts': data_facts,
                 'plot_data': plot_data}
