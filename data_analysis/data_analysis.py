@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
-from gui.page_notes import Notes
 import customtkinter as ctk
 import tkinter as tk
 

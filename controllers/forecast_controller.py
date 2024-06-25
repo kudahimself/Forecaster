@@ -1,17 +1,18 @@
 from models.forecast_model import ForecastingModel
-from views.forecast_view import ForecastingView
+from views.view_manager import ViewManager
+
 
 
 class ForecastingController:
-    def __init__(self, model: ForecastingModel, view: ForecastingView):
+    def __init__(self, model: ForecastingModel, view: ViewManager):
         self.model = model
         self.view = view
         self.view.set_controller(self)
-        self.view.show_app()
-
+        # self.view.show_app()
+    
     def update_view(self):
         self.model.update_data()
-        self.view.display_data(self.model.data)
+        # self.view.display_data(self.model.data)
         # self.model.update_forecast()
         # self.view.display_forecast(self.model.forecast)
 
@@ -28,5 +29,6 @@ class ForecastingController:
     def perform_impute_data(self, impute_type):
         print('Replacing Missing Values')
         self.model.execute_data_imputation(impute_type)
+        self.view.display_impute_type(impute_type)
         imputated_data = self.model.get_data()
-        print(imputated_data)
+    

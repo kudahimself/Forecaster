@@ -12,8 +12,8 @@ class ForecastingFacade:
         # self.analysis = None
         # self.imputated_data = None
 
-    def data_analysis(self):
-        self.analyse = DataAnalysis(self.data, self.freq)
+    def data_analysis(self, data):
+        self.analyse = DataAnalysis(data, self.freq)
         analysis_data = self.analyse.analyse_data()
         return analysis_data
 

@@ -17,7 +17,7 @@ class ForecastingModel:
     
     def execute_data_analysis(self):
         # Logic to perform analysis
-        self.analysis_results = self.facade.data_analysis()
+        self.analysis_results = self.facade.data_analysis(self.get_data())
     
     def get_analysis(self):
         return self.analysis_results
