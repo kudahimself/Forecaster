@@ -12,6 +12,8 @@ class Imputator:
     def impute_data(self, imp_type, fixed_value=None):
         ts_data = self.original
         match imp_type:
+            case 'original':
+                result = self.impute_original(ts_data)
 
             case 'next':
                 result = self.impute_next(ts_data)
@@ -38,6 +40,9 @@ class Imputator:
                 result = self.impute_fv(ts_data, fixed_value)
 
         return result
+    
+    def impute_original(self, ts_data):
+        return self.original
     
     def impute_next(self, ts_data):
         ts_data['values'] = ts_data['values'].replace(0, pd.NA).bfill()

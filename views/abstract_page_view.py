@@ -21,7 +21,7 @@ class AbstractPage(ABC):
         text_display.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
         text_display.insert(ctk.END, text + '\n')
     
-    def display_graph(self, frame, plot_data):
+    def display_line_graph(self, frame, plot_data):
         x = plot_data[0]
         y = plot_data[1]
         title= plot_data[2]
@@ -39,6 +39,26 @@ class AbstractPage(ABC):
         
         # Display only the first and last value on the x-axis
         ax.set_xticks([x.iloc[0], x.iloc[-1]])
+        
+        canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=ctk.TOP, fill=ctk.BOTH, expand=1)
+    
+    def display_histogram(self, frame, plot_data):
+        x = plot_data[0]
+        y = plot_data[1]
+        title= plot_data[2]
+        xlabel= plot_data[3]
+        ylabel = plot_data[4]
+        plot_frame = ctk.CTkFrame(frame)
+        plot_frame.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
+        
+        fig = Figure(figsize=(10, 8), dpi=100)
+        ax = fig.add_subplot(111)
+        ax.hist(y, density=True, orientation='horizontal')
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
         
         canvas = FigureCanvasTkAgg(fig, master=plot_frame)
         canvas.draw()

@@ -41,19 +41,19 @@ class DataImputationView(AbstractPage):
 
         # Create a frame inside the canvas with the same size as the main window
         frame = ctk.CTkFrame(canvas, width=self.vm.app_width, height=self.vm.app_height, fg_color="transparent")
-        frame.pack(expand=True)
-        frame.pack(pady=20, padx=60, fill="both", expand=True)
+        frame.pack(pady=10, padx=10, fill="both", expand=True)
 
         # Add a label
-        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18))
-        self.label_impute_type.pack(pady=12, padx=10, anchor='n')
+        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18), anchor='n')
+        self.label_impute_type.pack(side=ctk.TOP, pady=(20, 0), padx=10, anchor=ctk.N)
 
         # Add a label
         label = ctk.CTkLabel(master=frame, text="Select a type of imputation", font=("Arial", 18))
-        label.pack(pady=12, padx=10)
+        label.pack(pady=12, padx=10,  anchor="n")
 
         # Add buttons for each imputation type
         buttons = [
+            ("Original", "original"),
             ("Next", 'next'),
             ("Previous", 'previous'),
             ("Mode", 'mode'),
