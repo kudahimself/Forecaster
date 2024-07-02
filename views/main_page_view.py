@@ -27,25 +27,25 @@ class MainPageView(AbstractPage):
         self.vm.tabs[self.tab_name] = tab
 
         # Create a canvas inside the tab
-        canvas = ctk.CTkCanvas(tab)
+        canvas = ctk.CTkCanvas(tab, bg=self.vm.app_background)
         canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
         
+        # Create a label and place it in the center of the frame
+        label = ctk.CTkLabel(canvas, text="Welcome To Forecasting", font=("Arial", 24), text_color="white")
+        label.pack(pady=100, anchor='n')
 
         # Create a frame inside the canvas with the same size as the main window
-        frame = ctk.CTkFrame(canvas, width=self.vm.app_width, height=self.vm.app_height, fg_color="transparent")
-        frame.pack(expand=True)
+        frame = ctk.CTkFrame(canvas, width=self.vm.app_width, height=self.vm.app_height-300, fg_color="transparent")
+        frame.pack(expand=True, anchor='n')
 
-        # Create a label and place it in the center of the frame
-        label = ctk.CTkLabel(frame, text="Welcome To Forecasting", font=("Arial", 24))
-        label.pack(pady=(100, 20), anchor='n')
+        button = ctk.CTkButton(frame,
+                               text='Data Analysis',
+                               command=lambda: self.vm.data_analysis_page.create_data_analysis_page(),
+                               fg_color=self.vm.app_button_colour)
+        button.pack(side=ctk.LEFT, padx=10, pady=10, anchor='n')
 
-        # Add space after the label
-        space_label = ctk.CTkLabel(frame, text="", font=("Arial", 12))
-        space_label.pack(pady=20)
-
-        button = ctk.CTkButton(frame, text='Data Analysis', command=lambda: self.vm.data_analysis_page.create_data_analysis_page())
-        button.pack(side=ctk.LEFT, padx=10, pady=10)
-
-        button = ctk.CTkButton(frame, text='Data Imputation', command=lambda: self.vm.data_imputation_page.create_data_imputation_page())
-        button.pack(side=ctk.LEFT, padx=10, pady=10)
+        button = ctk.CTkButton(frame, text='Data Imputation',
+                               command=lambda: self.vm.data_imputation_page.create_data_imputation_page(),
+                               fg_color=self.vm.app_button_colour)
+        button.pack(side=ctk.LEFT, padx=10, pady=10, anchor='n')
 

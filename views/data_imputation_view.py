@@ -22,21 +22,12 @@ class DataImputationView(AbstractPage):
         if self.tab_name not in self.vm.tabs:
             self.vm.add_tab(self.tab_name)
             tab = self.vm.get_tab(self.tab_name)
-
-            # Create a canvas inside the tab
-            canvas = ctk.CTkCanvas(tab)
-            canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
-
-            # Create a frame inside the canvas with the same size as the main window
-            frame = ctk.CTkFrame(canvas, width=self.vm.app_width, height=self.vm.app_height, fg_color="transparent")
-            canvas.create_window((0, 0), window=frame, anchor='nw')
-
             self.display_buttons()
 
     def display_buttons(self):
         # Create a canvas inside the tab
         tab = self.vm.get_tab(self.tab_name)
-        canvas = ctk.CTkCanvas(tab)
+        canvas = ctk.CTkCanvas(tab, bg=self.vm.app_background)
         canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
 
         # Create a frame inside the canvas with the same size as the main window
@@ -44,7 +35,7 @@ class DataImputationView(AbstractPage):
         frame.pack(pady=10, padx=10, fill="both", expand=True)
 
         # Add a label
-        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18), anchor='n')
+        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18), anchor='nw')
         self.label_impute_type.pack(side=ctk.TOP, pady=(20, 0), padx=10, anchor=ctk.N)
 
         # Add a label

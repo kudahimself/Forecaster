@@ -1,4 +1,4 @@
-from facade.facade import ForecastingFacade
+from models.facade.facade import ForecastingFacade
 
 
 class ForecastingModel:

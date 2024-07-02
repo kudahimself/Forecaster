@@ -1,4 +1,4 @@
-from facade.facade import ForecastingFacade
+from models.facade.facade import ForecastingFacade
 from models.forecast_model import ForecastingModel
 from views.view_manager import ViewManager
 from controllers.forecast_controller import ForecastingController

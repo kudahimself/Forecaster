@@ -22,18 +22,19 @@ class DataAnalysisView(AbstractPage):
             tab = self.vm.get_tab(self.tab_name)
 
             # Create a canvas inside the tab
-            canvas = ctk.CTkCanvas(tab)
+            canvas = ctk.CTkCanvas(tab, bg=self.vm.app_background)
             canvas.pack(side=ctk.TOP, fill=ctk.BOTH, expand=True)
             
-
             # Create a frame inside the canvas with the same size as the main window
             frame = ctk.CTkFrame(canvas, width=self.vm.app_width, height=self.vm.app_height, fg_color="transparent")
             frame.pack(expand=True)
-            label = ctk.CTkLabel(frame, text="Data Analysis", font=("Arial", 24))
+            label = ctk.CTkLabel(frame, text="Data Analysis", font=("Arial", 24), text_color='white')
             label.pack(pady=10, side=ctk.TOP)
 
             # Add a button to perform analysis
-            perform_analysis_button = ctk.CTkButton(frame, text='Perform Analysis', command=self.vm.controller.perform_analysis)
+            perform_analysis_button = ctk.CTkButton(frame, text='Perform Analysis',
+                                                    command=self.vm.controller.perform_analysis,
+                                                    fg_color=self.vm.app_button_colour)
             perform_analysis_button.pack(padx=10, pady=10, anchor='n')
     
     def display_analysis_results(self, results):
@@ -45,24 +46,16 @@ class DataAnalysisView(AbstractPage):
             widget.destroy()
 
         # Create a canvas to add a scrollbar
-        canvas = ctk.CTkCanvas(tab)
+        canvas = ctk.CTkCanvas(tab, bg=self.vm.app_background)
         canvas.pack(side=ctk.LEFT, fill=ctk.BOTH, expand=1)
 
-        # Create a scrollbar
-        scrollbar = ctk.CTkScrollbar(tab, command=canvas.yview)
-        scrollbar.pack(side=ctk.RIGHT, fill=ctk.Y)
-
-        # Configure the canvas
-        canvas.configure(yscrollcommand=scrollbar.set)
-        canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
         # Create a frame inside the canvas
-        scrollable_frame = ctk.CTkFrame(canvas)
+        scrollable_frame = ctk.CTkScrollableFrame(canvas, fg_color=self.vm.app_background)
         scrollable_frame.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1)
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
 
         reset_button = ctk.CTkButton(master=scrollable_frame, text='Reset Analysis',
-                                     command=self.reset_page)
+                                     command=self.reset_page,
+                                     fg_color=self.vm.app_button_colour)
         reset_button.pack(pady=10, padx=10, anchor='n')
 
         # Display results
@@ -73,7 +66,6 @@ class DataAnalysisView(AbstractPage):
         plot_data = results['plot_data']
 
         self.display_table(scrollable_frame, aggregation_table)
-        self.display_table(scrollable_frame, missing_values)
         self.display_table(scrollable_frame, null_values)
         self.display_table(scrollable_frame, data_facts)
         self.display_line_graph(scrollable_frame, plot_data)

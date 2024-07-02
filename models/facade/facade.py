@@ -1,6 +1,6 @@
-from data_analysis.data_analysis import DataAnalysis
-from aggregator.aggregator import Aggregator
-from data_imputation.data_imputation import Imputator
+from models.data_analysis.data_analysis import DataAnalysis
+from models.aggregator.aggregator import Aggregator
+from models.data_imputation.data_imputation import Imputator
 
 
 class ForecastingFacade:
