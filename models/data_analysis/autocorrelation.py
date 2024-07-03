@@ -1,15 +1,9 @@
-# # For fetching data
-# import yfinance as yf
+import pandas as pd
+import statsmodels.tsa.api as smt
 
-# # For data manipulation
-# import pandas as pd
-# import numpy as np
 
-# # For time series analysis
-# import statsmodels.tsa.api as smt
-# import statsmodels.api as sm
+class AutoCorrelation():
 
-# # For data visualisation
-# import matplotlib.pyplot as plt
-# %matplotlib inline
-# plt.style.use('seaborn-darkgrid')
+    @classmethod
+    def calculate_ac(cls, data, lags=30):
+        return smt.acovf(data)[:lags]

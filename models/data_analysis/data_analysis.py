@@ -1,9 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-import numpy as np
-from tabulate import tabulate
-import customtkinter as ctk
-import tkinter as tk
+from models.data_analysis.autocorrelation import AutoCorrelation
+
 
 
 class DataAnalysisInterface(ABC):
@@ -40,7 +38,6 @@ class DataAnalysis(DataAnalysisInterface):
         null_values = self.null_values()
         data_facts = self.data_facts()
         plot_data = self.plot_data()
-        
         return {'missing_values': missing_values,
                 'null_values': null_values,
                 'data_facts': data_facts,
@@ -134,4 +131,5 @@ class DataAnalysis(DataAnalysisInterface):
         title = f'Aggregated Time Series Data to {self.freq}'
         x_label = 'Time'
         y_label = 'Values'
-        return [x, y, title, x_label, y_label]
+        z = AutoCorrelation.calculate_ac(df['values'])
+        return [x, y, title, x_label, y_label, z]

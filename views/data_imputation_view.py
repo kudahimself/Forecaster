@@ -35,11 +35,11 @@ class DataImputationView(AbstractPage):
         frame.pack(pady=10, padx=10, fill="both", expand=True)
 
         # Add a label
-        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18), anchor='nw')
+        self.label_impute_type = ctk.CTkLabel(master=frame, text="Imputation Type: None", font=("Arial", 18), anchor='nw', text_color='#FFFFFF')
         self.label_impute_type.pack(side=ctk.TOP, pady=(20, 0), padx=10, anchor=ctk.N)
 
         # Add a label
-        label = ctk.CTkLabel(master=frame, text="Select a type of imputation", font=("Arial", 18))
+        label = ctk.CTkLabel(master=frame, text="Select a type of imputation", font=("Arial", 18), text_color='white')
         label.pack(pady=12, padx=10,  anchor="n")
 
         # Add buttons for each imputation type
