@@ -69,6 +69,7 @@ class DataAnalysisView(AbstractPage):
         self.display_table(scrollable_frame, null_values)
         self.display_table(scrollable_frame, data_facts)
         self.display_line_graph(scrollable_frame, plot_data)
+        self.display_line_graph(scrollable_frame, plot_data, True)
         self.display_histogram(scrollable_frame, plot_data)
         self.display_autocovariance(scrollable_frame, plot_data)
         label2 = ctk.CTkLabel(scrollable_frame, text="", font=("Arial", 24))

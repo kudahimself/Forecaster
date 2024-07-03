@@ -4,6 +4,7 @@ from CTkTable import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
+import numpy as np
 import statsmodels.api as sm
 
 
@@ -34,10 +35,13 @@ class AbstractPage(ABC):
         text_display.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
         text_display.insert(ctk.END, text + '\n')
     
-    def display_line_graph(self, frame, plot_data):
-        
+    def display_line_graph(self, frame, plot_data, logarithmic=False):
+        if logarithmic:
+            y = plot_data[1].apply(lambda x: np.log(x))
+        else:
+            y = plot_data[1]
+
         x = plot_data[0]
-        y = plot_data[1]
         m = y.rolling(window=10).mean()
         title= plot_data[2]
         xlabel= plot_data[3]
