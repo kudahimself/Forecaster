@@ -103,7 +103,6 @@ class AbstractPage(ABC):
     
     def display_autocovariance(self, frame, plot_data):
 
-        x = plot_data[0]
         y = plot_data[5]
         title= plot_data[2]
         xlabel= plot_data[3]
@@ -113,9 +112,6 @@ class AbstractPage(ABC):
         
         fig = Figure(figsize=(10, 8), dpi=100)
         ax = fig.add_subplot(111)
-
-        # # Plot original data
-        # ax.plot(x, y, color='#736AC9', label='Original Data')
 
         sm.graphics.tsa.plot_acf(y, lags=29, ax = ax, color='#736AC9')
 
@@ -130,9 +126,6 @@ class AbstractPage(ABC):
         ax.tick_params(axis='x', colors=axis_color)
         ax.tick_params(axis='y', colors=axis_color)
         ax.title.set_color(axis_color)
-        
-        # # Display only the first and last value on the x-axis
-        # ax.set_xticks([x.iloc[0], x.iloc[-1]])
         
         canvas = FigureCanvasTkAgg(fig, master=plot_frame)
         canvas.draw()
