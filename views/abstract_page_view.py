@@ -3,6 +3,7 @@ import customtkinter as ctk
 from CTkTable import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import pandas as pd
 
 
 class AbstractPage(ABC):
@@ -36,6 +37,7 @@ class AbstractPage(ABC):
         
         x = plot_data[0]
         y = plot_data[1]
+        m = y.rolling(window=10).mean()
         title= plot_data[2]
         xlabel= plot_data[3]
         ylabel = plot_data[4]
@@ -44,7 +46,12 @@ class AbstractPage(ABC):
         
         fig = Figure(figsize=(10, 8), dpi=100)
         ax = fig.add_subplot(111)
-        ax.plot(x, y)
+
+        # Plot original data
+        ax.plot(x, y, color='#736AC9', label='Original Data')
+        # Plot moving average
+        ax.plot(x, m, color='yellow', label='Moving Average')
+
         fig.set_facecolor("#2E3C4F")
         ax.set_facecolor('#2E3C4F')
         ax.set_title(title)
@@ -75,7 +82,7 @@ class AbstractPage(ABC):
         
         fig = Figure(figsize=(10, 8), dpi=100)
         ax = fig.add_subplot(111)
-        ax.hist(y, density=True, orientation='horizontal')
+        ax.hist(y, density=True, orientation='horizontal', color='#736AC9')
         fig.set_facecolor("#2E3C4F")
         ax.set_facecolor('#2E3C4F')
         ax.set_title(title)
