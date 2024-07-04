@@ -8,7 +8,7 @@ import numpy as np
 
 class LinearRegressionModel:
     def __init__(self, dataframe, target_column='values'):
-        self.dataframe = dataframe.copy()
+        self.dataframe = dataframe.fillna(0).copy()
         self.target_column = target_column
         self.model = LinearRegression()
         

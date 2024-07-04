@@ -1,5 +1,5 @@
 from models.forecasting_models.linear_regression import LinearRegressionModel
-
+from models.forecasting_models.exponential_smoothing import ExponentialSmoothingModel
 
 class Trainer:
 
@@ -7,6 +7,7 @@ class Trainer:
         self.data = data
         self.models_list = []
         self.models_list.append(LinearRegressionModel(data))
+        self.models_list.append(ExponentialSmoothingModel(data))
 
 
     def train_models(self):

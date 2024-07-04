@@ -49,40 +49,40 @@ class Imputator:
         return self.original
     
     def impute_next(self, ts_data):
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).bfill()
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).bfill()
         return ts_data
 
     def impute_previous(self, ts_data):
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).ffill()
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).ffill()
         return ts_data
 
     def impute_mode(self, ts_data):
         mode_value = ts_data['values'].mode()[0]
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(mode_value)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(mode_value)
         return ts_data
 
     def impute_mean(self, ts_data):
         mean_value = ts_data['values'].mean()
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(mean_value)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(mean_value)
         return ts_data
 
     def impute_min(self, ts_data):
         min_value = ts_data['values'].min()
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(min_value)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(min_value)
         return ts_data
 
     def impute_max(self, ts_data):
         max_value = ts_data['values'].max()
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(max_value)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(max_value)
         return ts_data
 
     def impute_mva(self, ts_data, window=3):
         rolling_mean = ts_data['values'].rolling(window, min_periods=1).mean()
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(rolling_mean)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(rolling_mean)
         return ts_data
 
     def impute_fv(self, ts_data, fixed_value):
-        ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(fixed_value)
+        ts_data['values'] = ts_data['values'].replace(0, np.nan).fillna(fixed_value)
         return ts_data
     
     def impute_interpolate(self, ts_data):
@@ -92,7 +92,7 @@ class Imputator:
         return ts_data
     
     def get_results(self):
-        return self.data
+        return self.data.bfill()
     
     def render(self, tab):
         # Create a canvas inside the tab
