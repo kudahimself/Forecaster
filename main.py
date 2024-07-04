@@ -30,15 +30,9 @@ def main():
     data_analysis_page = DataAnalysisView(view)
     data_imputation_page = DataImputationView(view)
     model_training_page = ModelTrainingView(view)
-    view.show_app()
-    
-    
-    
-    
-
-    # Run the application
-    controller.update_view()
-    # Handle user interactions in a loop or event-driven manner
 
 
-main()
+    controller.view.show_app()
+
+if __name__ == "__main__":
+    main()
