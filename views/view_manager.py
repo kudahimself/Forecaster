@@ -17,6 +17,7 @@ class ViewManager:
         self.main_page = None
         self.data_analysis_page = None
         self.data_imputation_page = None
+        self.model_training_page = None
         self.app = None
         self.tabs = {}
         self.create_app_structure()
@@ -56,4 +57,7 @@ class ViewManager:
     
     def display_impute_type(self, impute_type):
         self.data_imputation_page.update_page(impute_type)
+    
+    def display_model_results(self, trained_models):
+        self.model_training_page.display_model_results(trained_models)
 

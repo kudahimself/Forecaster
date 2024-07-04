@@ -1,6 +1,7 @@
 from models.data_analysis.data_analysis import DataAnalysis
 from models.aggregator.aggregator import Aggregator
 from models.data_imputation.data_imputation import Imputator
+from models.trainer.trainer import Trainer
 
 
 class ForecastingFacade:
@@ -21,6 +22,11 @@ class ForecastingFacade:
         self.impute = Imputator(data)
         impute_data = self.impute.impute_data(impute_type)
         return impute_data
+    
+    def model_training(self, data):
+        self.trainer = Trainer(data)
+        trained_models = self.trainer.train_models()
+        return trained_models
 
     def fetch_data(self):
         # Simplified interface for fetching data

@@ -49,3 +49,8 @@ class MainPageView(AbstractPage):
                                fg_color=self.vm.app_button_colour)
         button.pack(side=ctk.LEFT, padx=10, pady=10, anchor='n')
 
+        button = ctk.CTkButton(frame, text='Training Models',
+                               command=lambda: self.vm.model_training_page.create_model_training_page(),
+                               fg_color=self.vm.app_button_colour)
+        button.pack(side=ctk.LEFT, padx=10, pady=10, anchor='n')
+

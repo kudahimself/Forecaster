@@ -45,6 +45,7 @@ class DataImputationView(AbstractPage):
         # Add buttons for each imputation type
         buttons = [
             ("Original", "original"),
+            ("Interpolate", "interpolate"),
             ("Next", 'next'),
             ("Previous", 'previous'),
             ("Mode", 'mode'),

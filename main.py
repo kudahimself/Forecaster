@@ -7,6 +7,7 @@ import numpy as np
 from views.main_page_view import MainPageView
 from views.data_analysis_view import DataAnalysisView
 from views.data_imputation_view import DataImputationView
+from views.model_training_view import ModelTrainingView
 
 
 # Generate the date range
@@ -24,9 +25,11 @@ def main():
     view = ViewManager()
     controller = ForecastingController(model, view)
 
+    # Initiliasing App UI
     main_page = MainPageView(view)
     data_analysis_page = DataAnalysisView(view)
     data_imputation_page = DataImputationView(view)
+    model_training_page = ModelTrainingView(view)
     view.show_app()
     
     

@@ -38,12 +38,13 @@ class AbstractPage(ABC):
     def display_line_graph(self, frame, plot_data, logarithmic=False):
         if logarithmic:
             y = plot_data[1].apply(lambda x: np.log(x))
+            title= 'Logarithmic ' + plot_data[2]
         else:
             y = plot_data[1]
+            title= plot_data[2]
 
         x = plot_data[0]
         m = y.rolling(window=10).mean()
-        title= plot_data[2]
         xlabel= plot_data[3]
         ylabel = plot_data[4]
         plot_frame = ctk.CTkFrame(frame)
@@ -130,6 +131,46 @@ class AbstractPage(ABC):
         ax.tick_params(axis='x', colors=axis_color)
         ax.tick_params(axis='y', colors=axis_color)
         ax.title.set_color(axis_color)
+        
+        canvas = FigureCanvasTkAgg(fig, master=plot_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=ctk.TOP, fill=ctk.BOTH, expand=1)
+    
+
+    def display_model(self, frame, plot_data):
+
+        y = plot_data[1]
+        x = plot_data[0]
+        X_test = plot_data[2]
+        y_pred = plot_data[3]
+        title= plot_data[4]
+        xlabel= plot_data[5]
+        ylabel = plot_data[6]
+        plot_frame = ctk.CTkFrame(frame)
+        plot_frame.pack(side=ctk.TOP, fill=ctk.BOTH, expand=1, padx=10, pady=10)
+        
+        fig = Figure(figsize=(10, 8), dpi=100)
+        ax = fig.add_subplot(111)
+
+        # Plot original data
+        ax.scatter(x, y, color='#736AC9', label='Original Data')
+        # Plot Model
+        ax.plot(X_test, y_pred, color='yellow', label='Model Data')
+
+        fig.set_facecolor("#2E3C4F")
+        ax.set_facecolor('#2E3C4F')
+        ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        axis_color = '#FFFFFF'
+        ax.xaxis.label.set_color(axis_color)
+        ax.yaxis.label.set_color(axis_color)
+        ax.tick_params(axis='x', colors=axis_color)
+        ax.tick_params(axis='y', colors=axis_color)
+        ax.title.set_color(axis_color)
+        
+        # Display only the first and last value on the x-axis
+        # ax.set_xticks([x.iloc[0], x.iloc[-1]])
         
         canvas = FigureCanvasTkAgg(fig, master=plot_frame)
         canvas.draw()

@@ -1,6 +1,7 @@
 import pandas as pd
 from statistics import mode
 import customtkinter as ctk
+import numpy as np
 
 
 class Imputator:
@@ -14,6 +15,9 @@ class Imputator:
         match imp_type:
             case 'original':
                 result = self.impute_original(ts_data)
+            
+            case 'interpolate':
+                result = self.impute_interpolate(ts_data)
 
             case 'next':
                 result = self.impute_next(ts_data)
@@ -79,6 +83,12 @@ class Imputator:
 
     def impute_fv(self, ts_data, fixed_value):
         ts_data['values'] = ts_data['values'].replace(0, pd.NA).fillna(fixed_value)
+        return ts_data
+    
+    def impute_interpolate(self, ts_data):
+        ts_data = ts_data.copy()  # Avoid modifying the original DataFrame
+        ts_data['values'] = ts_data['values'].replace(0, np.nan)
+        ts_data['values'] = ts_data['values'].interpolate(method='linear', limit_direction='forward', axis=0)
         return ts_data
     
     def get_results(self):

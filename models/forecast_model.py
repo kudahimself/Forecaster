@@ -8,6 +8,7 @@ class ForecastingModel:
         self.original_data = facade.data
         self.forecast = None
         self.analysis_results = None
+        self.trained_models = None
 
     def update_data(self):
         self.data = self.facade.fetch_data()
@@ -25,6 +26,12 @@ class ForecastingModel:
     def execute_data_imputation(self, impute_type):
         # Logic to impute data
         self.data = self.facade.data_imputation(self.original_data, impute_type)
+    
+    def execute_model_training(self):
+        self.trained_models = self.facade.model_training(self.data)
 
     def get_data(self):
         return self.data
+
+    def get_trained_models(self):
+        return self.trained_models
