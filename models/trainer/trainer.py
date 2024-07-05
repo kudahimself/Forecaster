@@ -3,12 +3,13 @@ from models.forecasting_models.exponential_smoothing import ExponentialSmoothing
 
 class Trainer:
 
-    def __init__(self, data) -> None:
+    def __init__(self, data, freq) -> None:
         self.data = data
+        self.freq = freq
         self.models_list = []
         self.models_list.append(LinearRegressionModel(data))
-        self.models_list.append(ExponentialSmoothingModel(data))
-
+        self.models_list.append(ExponentialSmoothingModel(data, freq))
+        self.models_list.append(ExponentialSmoothingModel(data, freq, seasonal='multiplicative'))
 
     def train_models(self):
 

@@ -15,35 +15,29 @@ from views.model_training_view import ModelTrainingView
 # values = np.random.randint(1, 20, date_range.shape[0])
 # df = pd.DataFrame({'datetime': date_range, 'values': values}).replace(1,None)
 # df.index = date_range  # set index
-# df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]c;ea
+# df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
 
 
 # Generate the date range
-date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 00:59', freq='1Min')
-
-sine_values = np.sin(np.linspace(0, 10 * np.pi, date_range.shape[0]))
-
-# Generate random values from a normal distribution
+date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 1:59', freq='1Min')
+sine_values = np.sin(np.linspace(0, 30 * np.pi, date_range.shape[0]))
 random_ints = np.random.normal(loc=0, scale=1, size=date_range.shape[0])
-
 # Clip the random values to be within the range [-0.05, 0.05]
-random_ints = np.clip(random_ints, -0.05, 0.05)
-
-# Add the clipped random values to the sine wave values
+random_ints = np.clip(random_ints, -0.01, 0.01)
 values = sine_values + random_ints
 
 # Create DataFrame
-df = pd.DataFrame({'datetime': date_range, 'values': values}).replace(1, None)
+df = pd.DataFrame({'datetime': date_range, 'values': values})
 
 # Set index
 df.index = date_range
 
-# Filter out specific time intervals
-df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
+# # Filter out specific time intervals
+# df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
 
 def main():
 
-    facade = ForecastingFacade(df_filtered, '1min')
+    facade = ForecastingFacade(df, '1min')
     model = ForecastingModel(facade)
     view = ViewManager()
     controller = ForecastingController(model, view)

@@ -5,6 +5,7 @@ class ForecastingModel:
     def __init__(self, facade: ForecastingFacade):
         self.facade = facade
         self.data = facade.data
+        self.freq = facade.freq
         self.original_data = facade.data
         self.forecast = None
         self.analysis_results = None
@@ -28,10 +29,10 @@ class ForecastingModel:
         self.data = self.facade.data_imputation(self.original_data, impute_type)
     
     def execute_model_training(self):
-        self.trained_models = self.facade.model_training(self.data)
+        self.trained_models = self.facade.model_training(self.data, self.freq)
 
     def get_data(self):
         return self.data
-
+    
     def get_trained_models(self):
         return self.trained_models

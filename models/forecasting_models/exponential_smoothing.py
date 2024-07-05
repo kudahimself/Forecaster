@@ -5,9 +5,10 @@ from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from sklearn.metrics import mean_squared_error
 
 class ExponentialSmoothingModel:
-    def __init__(self, dataframe, target_column='values', trend=None, seasonal=None):
+    def __init__(self, dataframe, freq, target_column='values', trend=None, seasonal='add'):
         self.dataframe = dataframe.fillna(0).copy()
-        print(self.dataframe)
+        self.freq = freq
+
         # Ensure all values are positive by adding a constant
         self.shift_constant = abs(dataframe['values'].min()) + 1
         self.dataframe['values'] =self.dataframe['values'] + self.shift_constant
@@ -31,7 +32,7 @@ class ExponentialSmoothingModel:
     
     def _find_best_seasonal_period(self):
         best_mse = float('inf')
-        best_period = 2  # Start with a reasonable default period
+        best_period = 1  # Start with a reasonable default period
 
         for period in range(2, 31):  # Checking periods from 2 to 30
             try:
@@ -41,19 +42,17 @@ class ExponentialSmoothingModel:
                     trend=self.trend, 
                     seasonal=self.seasonal,
                     initialization_method='estimated',
-                    freq='1min'
+                    freq=self.freq
                 )
                 fitted_model = model.fit()
                 predictions = fitted_model.predict(start=0, end=len(self.y_train) - 1)
                 mse = mean_squared_error(self.y_train, predictions)
-                
                 if mse < best_mse:
                     best_mse = mse
                     best_period = period
             except Exception as e:
                 print(f"Could not fit model for period {period}: {e}")
                 continue
-        
         return best_period
 
     def fit(self):
@@ -63,7 +62,7 @@ class ExponentialSmoothingModel:
             trend=self.trend, 
             seasonal=self.seasonal,
             initialization_method='estimated',
-            freq='1min'
+            freq=self.freq
         )
         self.fitted_model = self.model.fit()
 
@@ -73,8 +72,8 @@ class ExponentialSmoothingModel:
         return self.fitted_model.predict(start=0, end=len(self.y) - 1)
 
     def evaluate(self):
-        predictions = self.predict().iloc[self.train_size:]
-        self.mse = mean_squared_error(self.y_test, predictions)
+        predictions = self.predict()
+        # self.mse = mean_squared_error(self.y_test, predictions)
         
     def _preprocess_dataframe(self):
         for col in self.dataframe.columns:
@@ -94,11 +93,9 @@ class ExponentialSmoothingModel:
     
     def get_plot_data(self):
         x = self.y_train.index
-        X_test = self.dataframe.index
+        X_test = self.y.index
         y = self.y_train - self.shift_constant
         y_pred = self.predict() - self.shift_constant
-        print('x', X_test)
-        print('y', y_pred)
-        return [x, y, X_test, y_pred, 'Exponential Smoothing Model', 'DateTime', 'Target']
+        return [x, y, X_test, y_pred, f'{self.seasonal.capitalize()} Exponential Smoothing Model', 'DateTime', 'Target']
     
 
