@@ -37,7 +37,8 @@ class AbstractPage(ABC):
     
     def display_line_graph(self, frame, plot_data, logarithmic=False):
         if logarithmic:
-            y = plot_data[1].apply(lambda x: np.log(x))
+            shift_constant = abs(plot_data[1].min()) + 1
+            y = (plot_data[1] + shift_constant).apply(lambda x: np.log(x))
             title= 'Logarithmic ' + plot_data[2]
         else:
             y = plot_data[1]

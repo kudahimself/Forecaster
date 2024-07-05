@@ -28,7 +28,7 @@ class ForecastingController:
     def perform_model_training(self):
         # print('Training Models')
         self.model.execute_model_training()
-        trained_models = self.model.get_trained_models()
-        self.view.display_model_results(trained_models)
+        trained_models, best_model = self.model.get_trained_models()
+        self.view.display_model_results(trained_models, best_model)
         
     

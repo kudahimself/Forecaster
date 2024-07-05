@@ -37,7 +37,7 @@ class ModelTrainingView(AbstractPage):
                                                     fg_color=self.vm.app_button_colour)
             perform_analysis_button.pack(padx=10, pady=10, anchor='n')
     
-    def display_model_results(self, trained_models):
+    def display_model_results(self, trained_models, best_model):
         # Access the 'Data Analysis' tab
         tab = self.vm.tabs[self.tab_name]
 
@@ -57,6 +57,8 @@ class ModelTrainingView(AbstractPage):
                                      command=self.reset_page,
                                      fg_color=self.vm.app_button_colour)
         reset_button.pack(pady=10, padx=10, anchor='n')
+
+        self.display_table(scrollable_frame, best_model)
         for model in trained_models:
             self.display_model(scrollable_frame, model.get_plot_data())
     

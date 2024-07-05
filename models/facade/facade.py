@@ -10,6 +10,9 @@ class ForecastingFacade:
     def __init__(self, ts_data, freq):
         self.data = Aggregator.aggregate_dataframe(ts_data, freq)
         self.freq = freq
+        self.analyse = None
+        self.impute = None
+        self.trainer = None
         # self.analysis = None
         # self.imputated_data = None
 
@@ -26,7 +29,8 @@ class ForecastingFacade:
     def model_training(self, data, freq):
         self.trainer = Trainer(data, freq)
         trained_models = self.trainer.train_models()
-        return trained_models
+        best_models = self.trainer.best_models()
+        return trained_models, best_models
 
     def get_freq(self):
         return self.freq

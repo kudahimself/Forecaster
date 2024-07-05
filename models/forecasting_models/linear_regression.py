@@ -8,6 +8,7 @@ import numpy as np
 
 class LinearRegressionModel:
     def __init__(self, dataframe, target_column='values'):
+        self.model_name = 'Linear Regression'
         self.dataframe = dataframe.fillna(0).copy()
         self.target_column = target_column
         self.model = LinearRegression()
@@ -55,3 +56,7 @@ class LinearRegressionModel:
         y = self.y_train
         y_pred = self.model.predict(self.X_test)
         return [x, y, X_test, y_pred, 'Linear Regression Model', 'DateTime', 'Target']
+
+    def get_model_score(self):
+        return {'mse': self.mse,
+                'model_name': self.model_name}

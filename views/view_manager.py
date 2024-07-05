@@ -58,6 +58,6 @@ class ViewManager:
     def display_impute_type(self, impute_type):
         self.data_imputation_page.update_page(impute_type)
     
-    def display_model_results(self, trained_models):
-        self.model_training_page.display_model_results(trained_models)
+    def display_model_results(self, trained_models, best_model):
+        self.model_training_page.display_model_results(trained_models, best_model)
 

@@ -6,12 +6,13 @@ from sklearn.metrics import mean_squared_error
 
 class ExponentialSmoothingModel:
     def __init__(self, dataframe, freq, target_column='values', trend=None, seasonal='add'):
+        self.model_name = f'Exponential Smoothing {seasonal.capitalize()}'
         self.dataframe = dataframe.fillna(0).copy()
         self.freq = freq
 
         # Ensure all values are positive by adding a constant
         self.shift_constant = abs(dataframe['values'].min()) + 1
-        self.dataframe['values'] =self.dataframe['values'] + self.shift_constant
+        self.dataframe['values'] = self.dataframe['values'] + self.shift_constant
         self.target_column = target_column
         self.seasonal_periods = None
         self.trend = trend
@@ -45,8 +46,8 @@ class ExponentialSmoothingModel:
                     freq=self.freq
                 )
                 fitted_model = model.fit()
-                predictions = fitted_model.predict(start=0, end=len(self.y_train) - 1)
-                mse = mean_squared_error(self.y_train, predictions)
+                predictions = fitted_model.predict(start=0, end=len(self.y) - 1).iloc[self.train_size:]
+                mse = mean_squared_error(self.y_test, predictions)
                 if mse < best_mse:
                     best_mse = mse
                     best_period = period
@@ -72,8 +73,9 @@ class ExponentialSmoothingModel:
         return self.fitted_model.predict(start=0, end=len(self.y) - 1)
 
     def evaluate(self):
-        predictions = self.predict()
-        # self.mse = mean_squared_error(self.y_test, predictions)
+        predictions = self.predict().iloc[self.train_size:]
+
+        self.mse = mean_squared_error(self.y_test, predictions)
         
     def _preprocess_dataframe(self):
         for col in self.dataframe.columns:
@@ -97,5 +99,10 @@ class ExponentialSmoothingModel:
         y = self.y_train - self.shift_constant
         y_pred = self.predict() - self.shift_constant
         return [x, y, X_test, y_pred, f'{self.seasonal.capitalize()} Exponential Smoothing Model', 'DateTime', 'Target']
+    
+    def get_model_score(self):
+        return {'mse': self.mse,
+                'model_name': self.model_name}
+        
     
 

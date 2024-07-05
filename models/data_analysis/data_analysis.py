@@ -113,12 +113,12 @@ class DataAnalysis(DataAnalysisInterface):
         table = [
             ["Min Date", min_date],
             ["Max Date", max_date],
-            ["Min Value", min_value],
-            ["Max Value", max_value],
-            ["Mean Value", mean_value],
+            ["Min Value", round(min_value, 2)],
+            ["Max Value", round(max_value, 2)],
+            ["Mean Value", round(mean_value, 2)],
             ["Count", count],
             ["Standard Deviation", std_dev],
-            ["Standard Deviation over Mean", round(std_dev/mean_value, 2)]
+            ["Standard Deviation over Mean", round(std_dev / mean_value, 2) if mean_value != 0 else 0]
         ]
         
         return table
