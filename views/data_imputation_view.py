@@ -57,7 +57,9 @@ class DataImputationView(AbstractPage):
         ]
 
         for text, impute_type in buttons:
-            button = ctk.CTkButton(master=frame, text=text, command=lambda impute_type=impute_type: self.vm.controller.perform_impute_data(impute_type))
+            button = ctk.CTkButton(master=frame, text=text,
+                                   command=lambda impute_type=impute_type: self.vm.controller.perform_impute_data(impute_type),
+                                   fg_color=self.vm.app_button_colour)
             button.pack(pady=10)
         
         

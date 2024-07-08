@@ -9,15 +9,15 @@ from views.data_analysis_view import DataAnalysisView
 from views.data_imputation_view import DataImputationView
 from views.model_training_view import ModelTrainingView
 
-
+#############
 # # Generate the date range
-# date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 00:59', freq='1Min')
+# date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 02:59', freq='1Min')
 # values = np.random.randint(1, 20, date_range.shape[0])
 # df = pd.DataFrame({'datetime': date_range, 'values': values}).replace(1,None)
 # df.index = date_range  # set index
 # df_filtered = df[~df.index.isin(df.between_time('00:12', '00:14').index)]
 
-
+#####################
 # Generate the date range
 date_range = pd.date_range('2017-01-01 00:00', '2017-01-01 1:59', freq='1Min')
 sine_values = np.sin(np.linspace(0, 30 * np.pi, date_range.shape[0]))
