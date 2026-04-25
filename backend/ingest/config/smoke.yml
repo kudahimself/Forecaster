@@ -1,0 +1,9 @@
+# Tiny universe used only for smoke-testing the ingest pipeline.
+name: smoke
+as_of: "2024-01-01"
+source: "manual"
+note: "Three liquid names; keeps smoke tests under a few seconds."
+tickers:
+  - AAPL
+  - MSFT
+  - NVDA

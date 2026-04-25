@@ -161,3 +161,63 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 test.ipynb
+
+# Forecaster research tracker — NEVER commit anything in data/.
+# Everything is auto-generated (warehouse, artifacts, raw cache, parquet
+# dumps from notebooks, etc). Only the .gitkeep placeholder is tracked
+# so the dir exists for fresh clones.
+data/*
+!data/.gitkeep
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/playwright/.cache/
+
+# IDE
+.idea/
+.vscode/*.log
+.vscode/.ropeproject/
+*.swp
+*.swo
+*~
+
+# Claude Code local state
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Local env overrides (committed: shared .env.example only)
+.env.local
+.env.*.local
+
+# Generic database/data file catch-all — covers anywhere outside data/
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.parquet
+*.feather
+*.h5
+*.pkl
+*.pickle
+
+# TypeScript incremental build info
+frontend/*.tsbuildinfo
+frontend/tsconfig*.tsbuildinfo
+
+# Process files
+*.pid
+*.seed
+*.pid.lock

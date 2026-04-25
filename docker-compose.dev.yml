@@ -1,0 +1,41 @@
+# Dev overlay: bind-mounts source so edits hot-reload inside containers.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Or via the Makefile:
+#   make docker-dev
+#
+# Frontend runs Vite dev server (HMR) instead of the nginx-served static build.
+# Backend uses Django runserver's auto-reload (already CMD'd in the prod image).
+# Both bind-mount source from the host so Python/TS edits are picked up live.
+
+services:
+  backend:
+    # Reuse the prod image; just mount the source dirs over /app/backend and /app/sdk.
+    volumes:
+      - ./backend:/app/backend
+      - ./sdk:/app/sdk
+      - warehouse:/app/data
+    # runserver (already the CMD) watches files and reloads on .py changes.
+
+  frontend:
+    # Replace the nginx static-serve image with a Node dev container.
+    # Override the build to use a base Node image so we don't need a separate Dockerfile.
+    image: node:20-alpine
+    build: !reset null
+    working_dir: /app
+    command: sh -c "npm install --no-audit --no-fund && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ./frontend:/app
+      # Keep node_modules inside the container's anonymous volume so host's
+      # (potentially stale or wrong-platform) node_modules don't override it.
+      - /app/node_modules
+    environment:
+      - VITE_HOST=0.0.0.0
+      - VITE_API_TARGET=http://backend:8000
+      - VITE_USE_POLLING=1   # Windows bind-mounts need polling for HMR
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_healthy

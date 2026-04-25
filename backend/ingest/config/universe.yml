@@ -1,0 +1,119 @@
+# Static universe list for v1 of the research tracker.
+# ~106 most-liquid large-cap US equities (rough proxy for the S&P 100 / OEX).
+# Exact count drifts as constituents change; a data-driven universe-refresh
+# job (rank by rolling ADV) is deferred to a later milestone.
+name: liquid_us_large_cap
+as_of: "2025-01-01"
+source: "curated from S&P 100 constituents + source research ticker set"
+note: >
+  yfinance uses hyphenated share classes (e.g. BRK-B, not BRK.B).
+  If a ticker stops trading, keep it in the list — the DQ layer will flag
+  missing data rather than silently dropping names (important for survivorship
+  bias awareness).
+tickers:
+  - AAPL
+  - ABBV
+  - ABT
+  - ACN
+  - ADBE
+  - ADP
+  - AIG
+  - AMAT
+  - AMD
+  - AMGN
+  - AMT
+  - AMZN
+  - AVGO
+  - AXP
+  - BA
+  - BAC
+  - BK
+  - BKNG
+  - BLK
+  - BMY
+  - BRK-B
+  - C
+  - CAT
+  - CHTR
+  - CL
+  - CMCSA
+  - COF
+  - COP
+  - COST
+  - CRM
+  - CSCO
+  - CVS
+  - CVX
+  - DE
+  - DHR
+  - DIS
+  - DUK
+  - EMR
+  - F
+  - FDX
+  - GD
+  - GE
+  - GILD
+  - GM
+  - GOOG
+  - GOOGL
+  - GS
+  - HD
+  - HON
+  - IBM
+  - INTC
+  - ISRG
+  - JNJ
+  - JPM
+  - KO
+  - LIN
+  - LLY
+  - LMT
+  - LOW
+  - LRCX
+  - MA
+  - MCD
+  - MDLZ
+  - MDT
+  - MET
+  - META
+  - MMM
+  - MO
+  - MRK
+  - MS
+  - MSFT
+  - MU
+  - NEE
+  - NFLX
+  - NKE
+  - NOW
+  - NVDA
+  - ORCL
+  - PANW
+  - PEP
+  - PFE
+  - PG
+  - PM
+  - PYPL
+  - QCOM
+  - REGN
+  - RTX
+  - SBUX
+  - SCHW
+  - SO
+  - SPGI
+  - T
+  - TGT
+  - TMO
+  - TMUS
+  - TSLA
+  - TXN
+  - UNH
+  - UNP
+  - UPS
+  - USB
+  - V
+  - VZ
+  - WFC
+  - WMT
+  - XOM
