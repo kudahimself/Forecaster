@@ -46,6 +46,7 @@ scikit-base==0.13.2
 scikit-learn==1.7.2
 scipy==1.15.3
 scs==3.2.11
+setuptools==82.0.1
 six==1.17.0
 soupsieve==2.8.3
 sqlparse==0.5.5

@@ -1,6 +1,6 @@
 # Backend image: Django + DRF + all science deps.
 # Slim Python with manylinux wheels — no C toolchain needed.
-FROM python:3.10-slim
+FROM python:3.13-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

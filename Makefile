@@ -161,8 +161,12 @@ run-pipeline:
 
 test: test-backend test-e2e
 
+# Apps must be listed explicitly because Django's test discovery uses the
+# cwd as start_dir; from the repo root it can't find tests under backend/.
+TEST_APPS := tracker_core ingest quality features models_rf portfolio permutation scheduler api
+
 test-backend:
-	$(MANAGE) test --verbosity 1
+	$(MANAGE) test $(TEST_APPS) --verbosity 1
 
 # Seeds a small but varied warehouse (2 runs, 1 long-only + 1 long-short)
 # so the e2e tests have something to render. Additive — does not wipe.
