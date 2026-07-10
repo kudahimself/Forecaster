@@ -1,0 +1,132 @@
+# GICS sector mapping for the `liquid_us_large_cap` universe.
+# Based on S&P 500 GICS classifications as of ~2025.
+# Structure is sector -> list of tickers for readability.
+#
+# Notes on edge cases:
+#  - V, MA, PYPL are Financials (Transaction & Payment Processing Services),
+#    not IT — classified per GICS, not popular intuition.
+#  - GOOG/GOOGL, META, NFLX, DIS, CMCSA are Communication Services (post-2018
+#    GICS restructure), not IT or Consumer Discretionary.
+#  - ADP is Industrials (Professional Services), not IT.
+#  - BRK-B uses yfinance's hyphenated convention, not the "BRK.B" form.
+name: gics_sectors_us
+as_of: "2025-01-01"
+source: "GICS sector classification, manually curated for the liquid_us_large_cap universe"
+sectors:
+  Information Technology:
+    - AAPL
+    - ACN
+    - ADBE
+    - AMAT
+    - AMD
+    - AVGO
+    - CRM
+    - CSCO
+    - IBM
+    - INTC
+    - LRCX
+    - MSFT
+    - MU
+    - NOW
+    - NVDA
+    - ORCL
+    - PANW
+    - QCOM
+    - TXN
+  Communication Services:
+    - CHTR
+    - CMCSA
+    - DIS
+    - GOOG
+    - GOOGL
+    - META
+    - NFLX
+    - T
+    - TMUS
+    - VZ
+  Consumer Discretionary:
+    - AMZN
+    - BKNG
+    - F
+    - GM
+    - HD
+    - LOW
+    - MCD
+    - NKE
+    - SBUX
+    - TGT
+    - TSLA
+  Consumer Staples:
+    - CL
+    - COST
+    - KO
+    - MDLZ
+    - MO
+    - PEP
+    - PG
+    - PM
+    - WMT
+  Health Care:
+    - ABBV
+    - ABT
+    - AMGN
+    - BMY
+    - CVS
+    - DHR
+    - GILD
+    - ISRG
+    - JNJ
+    - LLY
+    - MDT
+    - MRK
+    - PFE
+    - REGN
+    - TMO
+    - UNH
+  Financials:
+    - AIG
+    - AXP
+    - BAC
+    - BK
+    - BLK
+    - BRK-B
+    - C
+    - COF
+    - GS
+    - JPM
+    - MA
+    - MET
+    - MS
+    - PYPL
+    - SCHW
+    - SPGI
+    - USB
+    - V
+    - WFC
+  Industrials:
+    - ADP
+    - BA
+    - CAT
+    - DE
+    - EMR
+    - FDX
+    - GD
+    - GE
+    - HON
+    - LMT
+    - MMM
+    - RTX
+    - UNP
+    - UPS
+  Energy:
+    - COP
+    - CVX
+    - XOM
+  Materials:
+    - LIN
+  Real Estate:
+    - AMT
+  Utilities:
+    - DUK
+    - NEE
+    - SO

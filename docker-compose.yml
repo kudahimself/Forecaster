@@ -1,0 +1,46 @@
+# One-command deploy: `docker compose up --build` then open http://localhost:5173
+#
+# - backend  : Django API on :8000 (internal). First-boot auto-migrates.
+# - frontend : nginx serving the Vite build; proxies /api/* to backend.
+#              Exposed as :5173 on the host for parity with local dev.
+# - warehouse volume: persists data/ across container restarts.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: forecaster-backend
+    volumes:
+      # Bind-mount the host's data dir so notebooks (running on the host)
+      # write to the SAME warehouse the container reads from. Switch to
+      # `warehouse:/app/data` (named volume) for true isolation.
+      - ./data:/app/data
+    expose:
+      - "8000"
+    ports:
+      # Uncomment to hit Django directly for debugging:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/').read()\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: forecaster-frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+
+# Named volume retained as an option — uncomment + swap above for isolated demos.
+# volumes:
+#   warehouse:

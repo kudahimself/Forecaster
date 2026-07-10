@@ -1,0 +1,40 @@
+# Exclude from Docker build context to keep images lean.
+
+# Python / venv
+.venv/
+**/__pycache__/
+**/*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/test-results/
+frontend/playwright-report/
+frontend/playwright/.cache/
+
+# Data — NEVER baked into the image; comes in via the volume.
+data/warehouse.db
+data/warehouse.db-journal
+data/artifacts/
+data/raw_cache/
+
+# VCS / IDE
+.git/
+.github/
+.vscode/
+.idea/
+.claude/
+
+# Legacy (kept out in case anything lingers on disk)
+models/
+views/
+controllers/
+main.py
+test.ipynb
+
+# OS
+.DS_Store
+Thumbs.db
